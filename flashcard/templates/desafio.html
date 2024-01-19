@@ -73,7 +73,7 @@
                 <p class="fonte-p">Erros: {{erros}} </p>
                 <p class="fonte-p">Faltantes: {{faltantes}} </p>
                 <br>
-                <a class="btn-cadastro btn-desafio" href="">Relatório detalhado</a>
+                <a class="btn-cadastro btn-desafio" href="{% url 'relatorio' desafio.id %}">Relatório detalhado</a>
             </div>
         </div>
 
