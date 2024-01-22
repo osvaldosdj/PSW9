@@ -12,10 +12,10 @@ ENV PATH $PATH:/home/pythonando/.local/bin
 
 COPY . /home/pythonando/app/
 
-#COPY requirements.txt /home/osvaldosdj/app/
-
 RUN pip install --upgrade pip
 
 RUN pip install -r requirements.txt
 
-#COPY . /home/osvaldosdj/app/
+# Adiciona o comando para iniciar o Django como ENTRYPOINT
+ENTRYPOINT ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+

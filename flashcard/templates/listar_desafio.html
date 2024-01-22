@@ -8,6 +8,9 @@
     <link href="{% static 'flashcard/css/iniciar_desafio.css' %}" rel="stylesheet">
     <link href="{% static 'flashcard/css/desafio.css' %}" rel="stylesheet">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-T9E1avd4w72/02S8wXEAUpiQQpK4b1P9lDArFIAeF3Feg1GXxhFIBB3jJ2xse4gB" crossorigin="anonymous">
+
+
 
 {% endblock 'cabecalho' %}
 
@@ -51,17 +54,32 @@
                   </tr>
                 </thead>
                 <tbody>
-                    {% for desafio in desafios %}
+                    {% for dados_desafio in dados_desafios %}
                         <tr class="linha">
-                            <th><a href="{% url 'desafio' desafio.id%}">{{desafio.id}}</a></th>
-                            <td>{{desafio.titulo}}</td>
-                            <td>{{desafio.get_dificuldade_display}}</td>
-                            <td>{{desafio.status}}</td>
+                            <th><a href="{% url 'desafio' dados_desafio.desafio.id%}">{{dados_desafio.desafio.id}}</a></th>
+                            <td>{{dados_desafio.desafio.titulo}}</td>
+                            <td>{{dados_desafio.desafio.get_dificuldade_display}}</td>
+                            <td>{{dados_desafio.desafio.status}}</td>
+                            <td>Acertos: {{dados_desafio.acertos}} / Erros: {{dados_desafio.erros}} / Faltantes: {{dados_desafio.faltantes}}</td>
                         </tr>
                   {% endfor %}
+
                 </tbody>
               </table>
         </div>
     </div>
     <script src="{% static 'flashcard/js/flashcard.js' %}"></script>
-{% endblock 'conteudo' %}
+
+
+     <style>
+        .progress-bar {
+            height: 100%;
+            font-size: 0.75rem;  /* Ajuste conforme necessário */
+        }
+        
+        .linha td {
+            vertical-align: middle;
+        }
+    </style>   
+    
+    {% endblock 'conteudo' %}

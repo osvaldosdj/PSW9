@@ -1,3 +1,5 @@
 Dockerfile
 .git
 .env
+__pycache__/
+.devcontainer

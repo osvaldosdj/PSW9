@@ -83,6 +83,9 @@ def deletar_flashcard(request, id):
    
    
 def iniciar_desafio(request):
+    if not request.user.is_authenticated:
+        return redirect('/usuarios/login')
+    
     if request.method == 'GET':
         categorias = Categoria.objects.all()
         dificuldades = Flashcard.DIFICULDADE_CHOICES
@@ -135,16 +138,62 @@ def iniciar_desafio(request):
         return redirect(f'/flashcard/desafio/{desafio.id}')
     
 
+
 def listar_desafio(request):
+    if not request.user.is_authenticated:
+        return redirect('/usuarios/login')
+
     desafios = Desafio.objects.filter(user=request.user)
-    #print(request.user)
+
+    dados_desafios = []
+
+    for desafio in desafios:
+        flashcards_do_desafio = desafio.flashcards.all()
+        acertos = flashcards_do_desafio.filter(respondido=True, acertou=True).count()
+        erros = flashcards_do_desafio.filter(respondido=True, acertou=False).count()
+        faltantes = flashcards_do_desafio.filter(respondido=False).count()
+
+        dados_desafios.append({
+            'desafio': desafio,
+            'acertos': acertos,
+            'erros': erros,
+            'faltantes': faltantes,
+        })
+
     return render(
         request,
         'listar_desafio.html',
         {
-            'desafios': desafios,
+            'dados_desafios': dados_desafios,
         },
-    )    
+    )
+
+#def listar_desafio(request):
+#    if not request.user.is_authenticated:
+#        return redirect('/usuarios/login')
+#    
+#    desafios = Desafio.objects.filter(user=request.user)
+#        
+#    for desafio in desafios:
+#        flashcards_do_desafio = desafio.flashcards.all()
+#        acertos = flashcards_do_desafio.filter(respondido=True, acertou=True).count()
+#        erros = flashcards_do_desafio.filter(respondido=True, acertou=False).count()
+#        faltantes = flashcards_do_desafio.filter(respondido=False).count()
+#
+#
+#    print(erros)
+#    print(acertos)
+#     
+#    return render(
+#        request,
+#        'listar_desafio.html',
+#        {
+#            'desafios': desafios,
+#            'acertos': acertos, 
+#            'erros': erros, 
+#            'faltantes': faltantes
+#        },
+#    )    
     
     
 def desafio(request, id):
@@ -176,6 +225,10 @@ def responder_flashcard(request, id):
 
 
 def relatorio(request, id):
+    
+    if not request.user.is_authenticated:
+        return redirect('/usuarios/login')
+    
     desafio = Desafio.objects.get(id=id)
     
     acertos = desafio.flashcards.filter(acertou=True).count()
